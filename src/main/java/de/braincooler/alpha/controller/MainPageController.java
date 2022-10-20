@@ -27,7 +27,7 @@ public class MainPageController {
 
     @GetMapping
     public String defaultPage(){
-        return "redirect:1637/1?field=size&dir=asc1";
+        return "redirect:1635/1?field=size&dir=asc1";
     }
 
     @GetMapping("/{sind}/{page-number}")
