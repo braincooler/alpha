@@ -7,8 +7,7 @@ import de.braincooler.alpha.GwWebClient;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -27,7 +26,8 @@ public class WarRepository {
         return wars.get(sindId) == null ? new HashSet<>() : wars.get(sindId);
     }
 
-    @EventListener(ApplicationReadyEvent.class)
+    @Scheduled(fixedDelay = 65 * 60 * 1000)
+    //@EventListener(ApplicationReadyEvent.class)
     public void initWars() {
         log.info("init war list...");
         sind.forEach(sindId -> {
@@ -47,8 +47,9 @@ public class WarRepository {
                         .getChildNodes()
                         .get(2)
                         .getVisibleText();
-
-                sindWars.add(new Sind(parseSindId(visibleTextWithId), visibleTextWithName));
+                int parsedSindId = parseSindId(visibleTextWithId);
+                sindWars.removeIf(s -> s.getId() == parsedSindId);
+                sindWars.add(new Sind(parsedSindId, visibleTextWithName));
             }
             wars.put(sindId, sindWars);
         });
