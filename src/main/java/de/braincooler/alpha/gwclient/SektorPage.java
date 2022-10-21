@@ -1,8 +1,6 @@
-package de.braincooler.alpha;
+package de.braincooler.alpha.gwclient;
 
 import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
-import de.braincooler.alpha.persitence.Sektor;
-import de.braincooler.alpha.persitence.Sind;
 import lombok.*;
 
 import java.util.List;

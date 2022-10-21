@@ -3,7 +3,7 @@ package de.braincooler.alpha.persitence;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlTable;
 import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
-import de.braincooler.alpha.GwWebClient;
+import de.braincooler.alpha.gwclient.GwWebClient;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +27,6 @@ public class WarRepository {
     }
 
     @Scheduled(fixedDelay = 65 * 60 * 1000)
-    //@EventListener(ApplicationReadyEvent.class)
     public void initWars() {
         log.info("init war list...");
         sind.forEach(sindId -> {

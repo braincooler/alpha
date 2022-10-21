@@ -1,4 +1,4 @@
-package de.braincooler.alpha;
+package de.braincooler.alpha.gwclient;
 
 import com.gargoylesoftware.css.parser.CSSErrorHandler;
 import com.gargoylesoftware.css.parser.CSSException;

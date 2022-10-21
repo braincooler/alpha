@@ -1,6 +1,6 @@
 package de.braincooler.alpha.service;
 
-import de.braincooler.alpha.GwWebClient;
+import de.braincooler.alpha.gwclient.GwWebClient;
 import de.braincooler.alpha.persitence.Building;
 import de.braincooler.alpha.persitence.BuildingRepository;
 import de.braincooler.alpha.persitence.Sind;

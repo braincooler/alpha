@@ -4,13 +4,11 @@ import com.gargoylesoftware.htmlunit.html.DomNode;
 import com.gargoylesoftware.htmlunit.html.DomNodeList;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlTableRow;
-import de.braincooler.alpha.GwWebClient;
-import de.braincooler.alpha.SektorPage;
+import de.braincooler.alpha.gwclient.GwWebClient;
+import de.braincooler.alpha.gwclient.SektorPage;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +20,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class BuildingRepository {
-    private static final List<Integer> sind = List.of(1635, 1637);
     private static final Logger log = LoggerFactory.getLogger(BuildingRepository.class);
 
     private final GwWebClient gwWebClient;
@@ -36,7 +33,6 @@ public class BuildingRepository {
     }
 
     @Scheduled(fixedDelay = 10 * 60 * 1000)
-    //@EventListener(ApplicationReadyEvent.class)
     public void initWars() {
         log.info("init building list...");
         for (int x = 47; x <= 53; x++) {
