@@ -27,6 +27,12 @@ public class BuildingRepository {
 
     private final List<Building> buildings = new ArrayList<>();
 
+    private boolean isReady = false;
+
+    public boolean isReady(){
+        return isReady;
+    }
+
     public List<Building> getWithWar(Set<Integer> warSindIds){
         return buildings.stream()
                 .filter(building -> warSindIds.contains(building.getUnderControl().getId()))
@@ -45,6 +51,7 @@ public class BuildingRepository {
             }
         }
 
+        isReady = true;
         log.info("init building ready... " + "Total: " + buildings.size());
     }
 
@@ -85,7 +92,7 @@ public class BuildingRepository {
                 building.setSize(buildingSize);
                 building.setUrl("https://www.gwars.io/object.php?id=" + buildingId);
                 building.setName(buildingName);
-                building.setTurel(Objects.equals(ownerSindId, sindId));
+                building.setTur(Objects.equals(ownerSindId, sindId));
 
                 buildings.removeIf(b -> b.getId() == buildingId);
                 buildings.add(building);

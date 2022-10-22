@@ -22,6 +22,11 @@ public class WarRepository {
 
     private final Map<Integer, Set<Sind>> wars = new HashMap<>();
 
+    private boolean isReady = false;
+
+    public boolean isReady(){
+        return isReady;
+    }
     public Set<Sind> getWars(int sindId) {
         return wars.get(sindId) == null ? new HashSet<>() : wars.get(sindId);
     }

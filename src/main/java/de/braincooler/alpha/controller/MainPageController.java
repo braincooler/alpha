@@ -1,6 +1,8 @@
 package de.braincooler.alpha.controller;
 
 import de.braincooler.alpha.persitence.Building;
+import de.braincooler.alpha.persitence.BuildingRepository;
+import de.braincooler.alpha.persitence.WarRepository;
 import de.braincooler.alpha.service.SindWarService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -21,6 +23,8 @@ public class MainPageController {
     private static final int PAGE_SIZE = 20;
 
     private final SindWarService sindWarService;
+    private final BuildingRepository buildingRepository;
+    private final WarRepository warRepository;
 
     @GetMapping
     public String defaultPage() {
@@ -33,6 +37,10 @@ public class MainPageController {
                            @RequestParam(name = "field") final String field,
                            @RequestParam(name = "dir") final String direction,
                            Model model) {
+
+        if (!buildingRepository.isReady() && !warRepository.isReady()) {
+            return "loading";
+        }
 
         List<Building> targets = sindWarService.getWars(sindId);
         SortUtil.sort(targets, field, direction);

@@ -15,5 +15,5 @@ public class Building {
     public Sektor sektor;
     public String url;
     public String name;
-    public boolean turel;
+    public boolean tur;
 }

@@ -11,6 +11,12 @@ public class SortUtil {
     public static void sort(List<Building> source, String field, String direction) {
 
         switch (field) {
+            case "tur" -> {
+                source.sort(Comparator.comparing(building -> building.tur));
+                if (direction.equals("desc")) {
+                    Collections.reverse(source);
+                }
+            }
             case "sektor" -> {
                 source.sort(Comparator.comparing(building -> building.getSektor().getName()));
                 if (direction.equals("desc")) {
