@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -84,6 +85,8 @@ public class BuildingRepository {
                 building.setSize(buildingSize);
                 building.setUrl("https://www.gwars.io/object.php?id=" + buildingId);
                 building.setName(buildingName);
+                building.setTurel(Objects.equals(ownerSindId, sindId));
+
                 buildings.removeIf(b -> b.getId() == buildingId);
                 buildings.add(building);
             }
