@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
@@ -27,13 +27,40 @@ public class MainPageController {
     private final WarRepository warRepository;
 
     @GetMapping
-    public String defaultPage() {
-        return "redirect:1635/1?field=size&dir=asc1";
+    public String defaultPage(Model model) {
+
+        if (!buildingRepository.isReady() && !warRepository.isReady()) {
+            return "loading";
+        }
+
+        List<Building> targets = sindWarService.getWars(1635);
+        SortUtil.sort(targets, "size", "asc");
+
+        int totalPages = calculatePageCount(targets);
+
+        int start = 0;
+        int end = Math.min(start + PAGE_SIZE, targets.size());
+        List<Building> buildings = new ArrayList<>();
+        for (int i = start; i < end; i++) {
+            buildings.add(targets.get(i));
+        }
+
+        model.addAttribute("buildings", buildings);
+        model.addAttribute("currentPage", 1);
+        model.addAttribute("sind", "1635");
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("totalItems", targets.size());
+        // sorting parameters
+        model.addAttribute("sortField", "size");
+        model.addAttribute("sortDir", "asc");
+        model.addAttribute("reverseSortDir", "desc");
+
+        return "main";
     }
 
-    @GetMapping("/{sind}/{page-number}")
-    public String mainPage(@PathVariable(name = "sind") final int sindId,
-                           @PathVariable(name = "page-number") final int pageNumber,
+    @PostMapping
+    public String mainPage(@RequestParam(name = "sind") final int sindId,
+                           @RequestParam(name = "currentPage") final int pageNumber,
                            @RequestParam(name = "field") final String field,
                            @RequestParam(name = "dir") final String direction,
                            Model model) {

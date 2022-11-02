@@ -19,6 +19,57 @@
         .mt-20 {
             margin-top: 20px;
         }
+
+        .pageButton {
+            box-shadow:inset 0px -1px 0px 0px #ffffff;
+            background:linear-gradient(to bottom, #f9f9f9 5%, #e9e9e9 100%);
+            background-color:#f9f9f9;
+            border-radius:40px;
+            border:2px solid #dcdcdc;
+            display:inline-block;
+            cursor:pointer;
+            color:#666666;
+            font-family:Arial;
+            font-size:12px;
+            font-weight:bold;
+            padding:4px 6px;
+            text-decoration:none;
+            text-shadow:0px 1px 0px #ffffff;
+        }
+        .pageButton:hover {
+            background:linear-gradient(to bottom, #e9e9e9 5%, #f9f9f9 100%);
+            background-color:#e9e9e9;
+        }
+        .pageButton:active {
+            position:relative;
+            top:1px;
+        }
+
+        .selectedButton {
+            box-shadow:inset 0px -1px 0px 0px #ffffff;
+            background-color:#b1e6d0;
+            border-radius:40px;
+            border:2px solid #dcdcdc;
+            display:inline-block;
+            cursor:pointer;
+            color:#666666;
+            font-family:Arial;
+            font-size:12px;
+            font-weight:bold;
+            padding:4px 6px;
+            text-decoration:none;
+            text-shadow:0px 1px 0px #ffffff;
+        }
+
+        .pageButton:hover {
+            background-color:#e9e9e9;
+        }
+        .pageButton:active {
+            position:relative;
+            top:1px;
+}
+
+
     </style>
 </head>
 
@@ -28,17 +79,41 @@
         <thead>
         <tr>
             <th>
-                <a th:href="@{'/' + ${sind} + '/' + ${currentPage} + '?field=control&dir=' + ${reverseSortDir}}">Под контролем</a>
+                <form method="post" th:action="@{'/'}">
+                    <input type="hidden" name="sind" th:value="${sind}"/>
+                    <input type="hidden" name="currentPage" th:value="${currentPage}"/>
+                    <input type="hidden" name="field" th:value="control"/>
+                    <input type="hidden" name="dir" th:value="${reverseSortDir}"/>
+                    <button type="submit" name="submit" value="value" class="pageButton">Под контролем</button>
+                </form>
             </th>
             <th>
-                <a th:href="@{'/' + ${sind} + '/' + ${currentPage} + '?field=size&dir=' + ${reverseSortDir}}">Размер</a>
+                <form method="post" th:action="@{'/'}">
+                    <input type="hidden" name="sind" th:value="${sind}"/>
+                    <input type="hidden" name="currentPage" th:value="${currentPage}"/>
+                    <input type="hidden" name="field" th:value="size"/>
+                    <input type="hidden" name="dir" th:value="${reverseSortDir}"/>
+                    <button type="submit" name="submit" value="value" class="pageButton">Размер</button>
+                </form>
             </th>
             <th>Недвижимость</th>
             <th>
-                <a th:href="@{'/' + ${sind} + '/' + ${currentPage} + '?field=sektor&dir=' + ${reverseSortDir}}">Сектор</a>
+                <form method="post" th:action="@{'/'}">
+                    <input type="hidden" name="sind" th:value="${sind}"/>
+                    <input type="hidden" name="currentPage" th:value="${currentPage}"/>
+                    <input type="hidden" name="field" th:value="sektor"/>
+                    <input type="hidden" name="dir" th:value="${reverseSortDir}"/>
+                    <button type="submit" name="submit" value="value" class="pageButton">Сектор</button>
+                </form>
             </th>
             <th>
-                <a th:href="@{'/' + ${sind} + '/' + ${currentPage} + '?field=tur&dir=' + ${reverseSortDir}}">Турель</a>
+                <form method="post" th:action="@{'/'}">
+                    <input type="hidden" name="sind" th:value="${sind}"/>
+                    <input type="hidden" name="currentPage" th:value="${currentPage}"/>
+                    <input type="hidden" name="field" th:value="tur"/>
+                    <input type="hidden" name="dir" th:value="${reverseSortDir}"/>
+                    <button type="submit" name="submit" value="value" class="pageButton">Турель</button>
+                </form>
             </th>
         </tr>
         </thead>
@@ -46,7 +121,7 @@
         <tr th:each="building : ${buildings}">
             <td th:text="${building.underControl.id}"></td>
             <td th:text="${building.size}"></td>
-            <td >
+            <td>
                 <a th:href="@{${building.url}}" th:text="${building.name}" target="_blank"></a>
             </td>
             <td th:text="${building.sektor.name}"></td>
@@ -55,33 +130,49 @@
         </tbody>
     </table>
     <!-- pagination control -->
+    <div class="col-sm-1 pagination">
+        <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+            <form method="post" th:action="@{'/'}" th:if="${currentPage != i}">
+                <input type="hidden" name="sind" th:value="${sind}"/>
+                <input type="hidden" name="currentPage" th:value="${i}"/>
+                <input type="hidden" name="field" th:value="${sortField}"/>
+                <input type="hidden" name="dir" th:value="${sortDir}"/>
+                <button type="submit" name="submit" value="value" class="pageButton"
+                        th:text="${i}"></button>
+            </form>
+            <span class="selectedButton" th:unless="${currentPage != i}">[[${i}]]</span>
+        </span>
+    </div>
     <div th:if="${totalPages > 1}">
         <div class="row col-sm-10">
             <div class="col-sm-2">
                 Total : <strong>[[${totalItems}]]</strong>
             </div>
-            <div class="col-sm-1">
-                    <span th:each="i: ${#numbers.sequence(1, totalPages)}">
-                        <a th:href="@{'/' + ${sind} + '/' + ${i} + '?field=' + ${sortField} + '&dir=' + ${sortDir}}"
-                           th:if="${currentPage != i}">[[${i}]]</a>
-                        <span th:unless="${currentPage != i}">[[${i}]]</span>
-                    </span>
-            </div>
-            <div class="col-sm-1">
-                <a th:href="@{'/' + ${sind} + '/' + ${currentPage + 1} + '?field=' + ${sortField} + '&dir=' + ${sortDir}}"
-                   th:if="${currentPage < totalPages}">
-                    Next
-                </a>
-                <span th:unless="${currentPage < totalPages}">Next</span>
-            </div>
-            <div class="col-sm-1">
-                <a th:href="@{'/' + ${sind} + '/' + ${totalPages} + '?field=' + ${sortField} + '&dir=' + ${sortDir}}"
-                   th:if="${currentPage < totalPages}">
-                    Last
-                </a>
-                <span th:unless="${currentPage < totalPages}">Last</span>
-            </div>
         </div>
+    </div>
+    <div class="col-sm-1 pagination">
+    <span>
+        <form method="post" th:action="@{'/'}" th:if="${sind != 1635}">
+            <input type="hidden" name="sind" th:value="1635"/>
+            <input type="hidden" name="currentPage" th:value="1"/>
+            <input type="hidden" name="field" th:value="${sortField}"/>
+            <input type="hidden" name="dir" th:value="${sortDir}"/>
+            <button type="submit" name="submit" value="value" class="pageButton"
+                    th:text="1635"></button>
+        </form>
+        <span class="selectedButton" th:if="${sind == 1635}">1635</span>
+    </span>
+        <span>
+        <form method="post" th:action="@{'/'}" th:if="${sind != 1637}">
+            <input type="hidden" name="sind" th:value="1637"/>
+            <input type="hidden" name="currentPage" th:value="1"/>
+            <input type="hidden" name="field" th:value="${sortField}"/>
+            <input type="hidden" name="dir" th:value="${sortDir}"/>
+            <button type="submit" name="submit" value="value" class="pageButton"
+                    th:text="1637"></button>
+        </form>
+        <span class="selectedButton" th:if="${sind == 1637}">1637</span>
+    </span>
     </div>
 </div>
 </body>

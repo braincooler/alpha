@@ -43,7 +43,7 @@ public class BuildingRepository {
     public void initWars() {
         log.info("init building list...");
         for (int x = 47; x <= 53; x++) {
-            for (int y = 47; y <= 53; y++) {
+            for (int y = 47; y <= 47; y++) {
                 SektorPage plantsSektorPage = gwWebClient.fetchBuildingTable(x, y, "plants");
                 SektorPage techSektorPage = gwWebClient.fetchBuildingTable(x, y, "tech");
                 extracted(x, y, plantsSektorPage, plantsSektorPage.getRows());
