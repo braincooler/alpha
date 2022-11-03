@@ -90,6 +90,7 @@ public class MainPageController {
 
         model.addAttribute("buildings", buildings);
         model.addAttribute("currentPage", pageNumber);
+        model.addAttribute("currentWarSind", warSindId);
         model.addAttribute("sind", sindId);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("totalItems", targets.size());

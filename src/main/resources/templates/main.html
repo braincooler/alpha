@@ -79,6 +79,7 @@
         <span th:each="i: ${#numbers.sequence(1, totalPages)}">
             <form method="post" th:action="@{'/'}" th:if="${currentPage != i}">
                 <input type="hidden" name="sind" th:value="${sind}"/>
+                <input type="hidden" name="warSindId" th:value="${currentWarSind}"/>
                 <input type="hidden" name="currentPage" th:value="${i}"/>
                 <input type="hidden" name="field" th:value="${sortField}"/>
                 <input type="hidden" name="dir" th:value="${sortDir}"/>
