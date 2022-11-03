@@ -18,16 +18,13 @@ th, td {
 }
 
 .pageButton {
-    background:linear-gradient(to bottom, #ededed 5%, #dfdfdf 100%);
-    background-color:#ededed;
-    border:1px solid #dcdcdc;
+    background-color:white;
+    border:none;
     display:inline-block;
-    cursor:pointer;
     color:#777777;
     font-family:Arial;
     font-size:12px;
     font-weight:bold;
-    padding:4px 6px;
     text-decoration:none;
 }
 
