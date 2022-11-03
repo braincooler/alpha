@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequiredArgsConstructor
@@ -61,6 +62,7 @@ public class MainPageController {
     @PostMapping
     public String mainPage(@RequestParam(name = "sind") final int sindId,
                            @RequestParam(name = "currentPage") final int pageNumber,
+                           @RequestParam(name = "warSindId", required = false) final Integer warSindId,
                            @RequestParam(name = "field") final String field,
                            @RequestParam(name = "dir") final String direction,
                            Model model) {
@@ -70,6 +72,11 @@ public class MainPageController {
         }
 
         List<Building> targets = sindWarService.getWars(sindId);
+
+        if (warSindId != null){
+            targets.removeIf(building -> !Objects.equals(building.getUnderControl().getId(), warSindId));
+        }
+
         SortUtil.sort(targets, field, direction);
 
         int totalPages = calculatePageCount(targets);
