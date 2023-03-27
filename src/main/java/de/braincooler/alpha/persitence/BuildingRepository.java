@@ -46,8 +46,8 @@ public class BuildingRepository {
             for (int y = 47; y <= 53; y++) {
                 SektorPage plantsSektorPage = gwWebClient.fetchBuildingTable(x, y, "plants");
                 SektorPage techSektorPage = gwWebClient.fetchBuildingTable(x, y, "tech");
-                extracted(x, y, plantsSektorPage, plantsSektorPage.getRows());
-                extracted(x, y, plantsSektorPage, techSektorPage.getRows());
+                parseAndSaveBuildings(x, y, plantsSektorPage, plantsSektorPage.getRows());
+                parseAndSaveBuildings(x, y, plantsSektorPage, techSektorPage.getRows());
             }
         }
 
@@ -55,7 +55,7 @@ public class BuildingRepository {
         log.info("init building ready... " + "Total: " + buildings.size());
     }
 
-    private void extracted(int x, int y, SektorPage plantsSektorPage, List<HtmlTableRow> plantRows) {
+    private void parseAndSaveBuildings(int x, int y, SektorPage plantsSektorPage, List<HtmlTableRow> plantRows) {
         for (int i = 1; i < plantRows.size(); i++) {
             String classValue = plantRows.get(i)
                     .getCell(0)
@@ -67,6 +67,9 @@ public class BuildingRepository {
                 int buildingLinkIndex = buildingColumn.getChildNodes().size() == 3 ? 1 : 0;
                 HtmlAnchor buildingLink = (HtmlAnchor) buildingColumn.getChildNodes().get(buildingLinkIndex);
                 String buildingName = buildingColumn.getChildNodes().get(buildingLinkIndex).getVisibleText();
+                if (isInBlackList(buildingName)){
+                    break;
+                }
                 buildingName = buildingName.substring(buildingName.indexOf("]") + 1);
                 int buildingId = parseBuildingId(buildingLink);
                 String firstColumnVisibleText = buildingColumn.getVisibleText();
@@ -92,12 +95,31 @@ public class BuildingRepository {
                 building.setSize(buildingSize);
                 building.setUrl("https://www.gwars.io/object.php?id=" + buildingId);
                 building.setName(buildingName);
-                building.setTur(Objects.equals(ownerSindId, sindId));
+                building.setTur(hasTurel(sindId, ownerSindId));
 
                 buildings.removeIf(b -> b.getId() == buildingId);
                 buildings.add(building);
             }
         }
+    }
+
+    private String hasTurel(Integer sindId, Integer ownerSindId) {
+        if (ownerSindId == null || isTechSind(ownerSindId)){
+            return "ztech";
+        }
+        return Objects.equals(ownerSindId, sindId) ? "da" : "net";
+    }
+
+    private boolean isTechSind(Integer ownerSindId) {
+        Set<Integer> techSind = Set.of(7518);
+        return techSind.contains(ownerSindId);
+    }
+
+    private boolean isInBlackList(String buildingName) {
+        Set<String> buildingsBlackList = Set.of("Электростанция", "Цех комплектов апгрейда шлемов", "Цех апгрейда дробовиков",
+                "Цех доработки брони", "Цех апгрейда автоматов", "Пистолетная мастерская", "Снайперская мастерская",
+                "Пулеметный цех", "Мастерская гранатометов", "Цех доработки шлемов", "Цех доработки обуви");
+        return buildingsBlackList.contains(buildingName);
     }
 
     private int parseBuildingId(HtmlAnchor link) {
